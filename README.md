@@ -2,7 +2,7 @@
 
 This is a simple example of a GraphQL API using express-graphql.
 
-Dependencies:
+### Dependencies:
 - express
 - express-graphql
 - graphql
@@ -14,7 +14,7 @@ PORT = 5000
 MONGO_URI = "mongodb://localhost/projectMgmt"
 ```
 
-MongoDB connection:
+### MongoDB connection:
 ```js
 import mongoose from "mongoose";
 
@@ -27,7 +27,7 @@ const connectDB = async () => {
 export default connectDB;
 ```
 
-Mongoose models:
+### Mongoose models:
 
 ```js
 import mongoose from "mongoose";
@@ -70,7 +70,33 @@ const ProjectSchema = new mongoose.Schema({
 export default mongoose.model("Project", ProjectSchema);
 ```
 
-GraphQL schema:
+### Data set example:
+clients:
+```json
+{
+  "_id": {
+    "$oid": "632851c6b6b942b311adaa2f"
+  },
+  "name": "Tony Stark",
+  "email": "ironman@gmail.com",
+  "phone": "343-567-4333"
+}
+```
+
+projects:
+```json
+{
+  "_id": {
+    "$oid": "632851d1b6b942b311adaa36"
+  },
+  "clientId": "632851c6b6b942b311adaa30",
+  "name": "eCommerce Website",
+  "description": "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu.",
+  "status": "In Progress"
+}
+```
+
+### GraphQL schema:
 
 We need dependencies:
 ```js
@@ -88,7 +114,7 @@ import {
 } from "graphql";
 ```
 
-Define data types for GraphQL:
+#### Define data types for GraphQL:
 ```js
 // Project Type
 const ProjectType = new GraphQLObjectType({
@@ -119,7 +145,7 @@ const ClientType = new GraphQLObjectType({
 });
 ```
 
-Define root queries:
+#### Define root queries:
 ```js
 
 const RootQuery = new GraphQLObjectType({
@@ -155,7 +181,7 @@ const RootQuery = new GraphQLObjectType({
 });
 ```
 
-Define mutations:
+#### Define mutations:
 ```js
 
 // Mutations
@@ -272,10 +298,34 @@ const mutation = new GraphQLObjectType({
 });
 ```
 
-Export the schema:
+#### Export the schema:
 ```js
 export default new GraphQLSchema({
   query: RootQuery,
   mutation,
 });
 ```
+
+###
+Using graphql in express server:
+```js
+import express from "express";
+import { graphqlHTTP } from "express-graphql";
+import schema from "./schema/schema.js";
+
+const app = express();
+
+app.use(
+  "/graphql",
+  graphqlHTTP({
+    schema,
+    graphiql: process.env.NODE_ENV === "development",
+  })
+);
+```
+We want graphiql to be available only in development mode.
+
+### Working with grpahql in the browser
+
+Open http://localhost:5000/graphql in the browser. You should see the graphiql interface.
+Now you can run queries and mutations in the browser using the graphiql interface.
