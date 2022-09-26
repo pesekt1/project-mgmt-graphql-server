@@ -1,6 +1,7 @@
 # GraphQL API using express-graphql
-
 This is a simple example of a GraphQL API using express-graphql.
+
+![System Architecture](graphQL.png)
 
 ### Dependencies:
 - express
